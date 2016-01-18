@@ -199,6 +199,7 @@ build_prompt() {
   prompt_git
   prompt_hg
   prompt_end
+  echo "\r\n\u21b3"
 }
 
 PROMPT='%{%f%b%k%}$(build_prompt) '
