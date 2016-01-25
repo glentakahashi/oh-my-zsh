@@ -164,7 +164,10 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue black '%~'
+  # taken from https://stackoverflow.com/questions/26554713/how-to-truncate-working-directory-in-prompt-to-show-first-and-last-folder/26555347#26555347
+  # with the fix of length($i) to length(e)
+  local DIR=$(pwd | awk -F/ -v "n=$(tput cols)" -v "h=^$HOME" '{sub(h,"~");n=0.5*n;b=$1"/"$2} length($0)<=n || NF==3 {print;next;} NF>3{b=b"..."; e=$NF; n-=length(b $NF); for (i=NF-1;i>3 && n>length(e)+1;i--) e=$i"/"e;} {print b e;}')
+  prompt_segment blue black "$DIR"
 }
 
 # Virtualenv: current working virtualenv
