@@ -166,6 +166,8 @@ prompt_hg() {
 prompt_dir() {
   # taken from https://stackoverflow.com/questions/26554713/how-to-truncate-working-directory-in-prompt-to-show-first-and-last-folder/26555347#26555347
   # with the fix of length($i) to length(e)
+  # TODO: fix flickering https://www.netsarang.com/knowledgebase/xmanager/3917/In_ZSH,_when_the_terminal_size_is_reconfigured,_multi-line_prompt_texts_are_not_properly_shown
+  # https://bbs.archlinux.org/viewtopic.php?id=50240
   local DIR=$(pwd | awk -F/ -v "n=$(tput cols)" -v "h=^$HOME" '{sub(h,"~");n=0.5*n;b=$1"/"$2} length($0)<=n || NF==3 {print;next;} NF>3{b=b"..."; e=$NF; n-=length(b $NF); for (i=NF-1;i>3 && n>length(e)+1;i--) e=$i"/"e;} {print b e;}')
   prompt_segment blue black "$DIR"
 }
@@ -202,7 +204,8 @@ build_prompt() {
   prompt_git
   prompt_hg
   prompt_end
-  echo "\r\n\u21b3"
+  echo
+  echo "\u21b3"
 }
 
 PROMPT='%{%f%b%k%}$(build_prompt) '
