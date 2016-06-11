@@ -80,7 +80,7 @@ prompt_end() {
 # Context: user@hostname (who am I and where am I)
 prompt_context() {
   if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{yellow}%}.)$USER@%m"
+    prompt_segment black default "%(!.%{%F{yellow}%}.)$USER@%m $(date '+%H:%M:%S')"
   fi
 }
 
@@ -196,6 +196,7 @@ prompt_status() {
 
 ## Main prompt
 build_prompt() {
+  _KEYMAP=${KEYMAP:-viins}
   RETVAL=$?
   prompt_status
   prompt_virtualenv
@@ -204,8 +205,14 @@ build_prompt() {
   prompt_git
   prompt_hg
   prompt_end
-  echo
-  echo "\u21b3"
+  printf '\n'
+  CURRENT_BG='NONE'
+  if [[ $KEYMAP == "vicmd" ]]; then
+    prompt_segment green black " N "
+  else
+    prompt_segment white blue " I "
+  fi
+  prompt_end
 }
 
 PROMPT='%{%f%b%k%}$(build_prompt) '
