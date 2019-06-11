@@ -256,6 +256,7 @@ build_prompt() {
   prompt_end
   printf '\n'
   CURRENT_BG='NONE'
+  echo -n
   if [[ $KEYMAP == "vicmd" ]]; then
     prompt_segment green black " N "
   else
