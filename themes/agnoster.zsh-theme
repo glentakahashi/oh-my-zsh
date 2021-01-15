@@ -228,6 +228,20 @@ prompt_status() {
   [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
 
+#Kubernetes Context:
+# - display current AWS_PROFILE name
+# - displays yellow on red if profile name contains 'production' or
+#   ends in '-prod'
+# - displays black on green otherwise
+prompt_kubectl() {
+  KUBECTX=$(echo $KUBE_PS1_CONTEXT | cut -d '/' -f 2)
+  [[ -z "$KUBECTX" ]] && return
+  case "$KUBECTX" in
+    *-prod*|*production*) prompt_segment red yellow  "$KUBECTX" ;;
+    *) prompt_segment green black "$KUBECTX" ;;
+  esac
+}
+
 #AWS Profile:
 # - display current AWS_PROFILE name
 # - displays yellow on red if profile name contains 'production' or
@@ -247,6 +261,7 @@ build_prompt() {
   RETVAL=$?
   prompt_status
   prompt_virtualenv
+  prompt_kubectl
   prompt_aws
   prompt_context
   prompt_dir
